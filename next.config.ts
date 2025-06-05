@@ -1,7 +1,27 @@
-import type { NextConfig } from "next";
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  reactStrictMode: true,
+  images: {
+    // Permitir imágenes de Unsplash
+    domains: ['images.unsplash.com'],
 
-const nextConfig: NextConfig = {
-  /* config options here */
-};
+    // Alternativamente, puedes usar remotePatterns (más nuevo y flexible):
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+        port: '',
+        pathname: '/**',
+      },
+      // Puedes agregar más dominios aquí si necesitas
+      {
+        protocol: 'https',
+        hostname: 'another-domain.com',
+        port: '',
+        pathname: '/**',
+      }
+    ],
+  },
+}
 
-export default nextConfig;
+module.exports = nextConfig
