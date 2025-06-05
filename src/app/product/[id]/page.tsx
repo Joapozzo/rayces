@@ -4,16 +4,12 @@ import React, { use, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { products } from '../../data/product'; 
-import { Product } from '../../interfaces/product'; 
-import { useRouter } from 'next/navigation';
 
 type PageProps = {
     params: Promise<{ id: string }>;
 };
 
-
-const page = ({ params }: PageProps) => {
-    const router = useRouter();
+const Page = ({ params }: PageProps) => {
     const { id } = use(params);
 
     // Encontrar el producto
@@ -378,4 +374,4 @@ const page = ({ params }: PageProps) => {
     );
 };
 
-export default page;
+export default Page;

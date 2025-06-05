@@ -8,7 +8,6 @@ import FeaturedProductsSection from './components/FeaturedProduct';
 import CategoriesSection from './components/Category';
 import AmbientesSection from './components/Ambiente';
 import ProcessSection from './components/Process';
-import TestimonialsSection from './components/Testimonial';
 import ContactSection from './components/Contact';
 
 // Custom hook para animaciones de scroll
