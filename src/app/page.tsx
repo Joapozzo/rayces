@@ -6,8 +6,8 @@ import StatsSection from './components/Stats';
 import ValuesSection from './components/Values';
 import FeaturedProductsSection from './components/FeaturedProduct';
 import CategoriesSection from './components/Category';
-import AmbientesSection from './components/Ambiente';
-import ProcessSection from './components/Process';
+// import AmbientesSection from './components/Ambiente';
+// import ProcessSection from './components/Process';
 import ContactSection from './components/Contact';
 
 // Custom hook para animaciones de scroll
@@ -58,8 +58,8 @@ const RaycesLandingPage: React.FC = () => {
         <ValuesSection />
         <FeaturedProductsSection />
         <CategoriesSection />
-        <AmbientesSection />
-        <ProcessSection />
+        {/* <AmbientesSection /> */}
+        {/* <ProcessSection /> */}
         {/* <TestimonialsSection /> */}
         <ContactSection />
       </div>

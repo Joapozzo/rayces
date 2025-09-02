@@ -1,60 +1,124 @@
-import { useState } from "react";
-import { products } from "../data/product";
-import { categories } from "../data/category";
+import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
+import { Home, Sofa, Table, Coffee, ChefHat } from 'lucide-react';
+import { products } from "../data/product";
+import ProductCard from "./CardProduct";
+import CustomButton from "./UI/button";
+
+export const categories = [
+    { id: "conjuntos", name: "Mesas", description: "Mesas de comedor", icon: <Table className="w-8 h-8" /> },
+    { id: "sillones", name: "Sillones", description: "Sofás y esquineros", icon: <Sofa className="w-8 h-8" /> },
+    { id: "ratonas", name: "Ratonas", description: "Mesas de centro", icon: <Coffee className="w-8 h-8" /> },
+    { id: "sillas", name: "Sillas", description: "Sillas de comedor", icon: <ChefHat className="w-8 h-8" /> },
+    // { id: "conjuntos", name: "Conjuntos", description: "Sets completos", icon: <Archive className="w-8 h-8" /> }
+];
+
+// Hook para detectar cuando un elemento entra en el viewport
+const useIntersectionObserver = (threshold: number = 0.2) => {
+    const [isVisible, setIsVisible] = useState(false);
+    const ref = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                if (entry.isIntersecting) {
+                    setIsVisible(true);
+                }
+            },
+            { threshold }
+        );
+
+        if (ref.current) {
+            observer.observe(ref.current);
+        }
+
+        return () => {
+            if (ref.current) {
+                observer.unobserve(ref.current);
+            }
+        };
+    }, [threshold]);
+
+    return [ref, isVisible] as const;
+};
 
 // Categories Section Component
 const CategoriesSection: React.FC = () => {
     const router = useRouter();
+    const [sectionRef, isVisible] = useIntersectionObserver(0.2);
     const [selectedCategory, setSelectedCategory] = useState<string>('all');
 
     const filteredProducts = selectedCategory === 'all'
-        ? products
-        : products.filter(p => p.category === selectedCategory);
+        ? products.slice(0, 6) // Limitar a 6 productos para esta sección
+        : products.filter(p => p.category === selectedCategory).slice(0, 6);
 
     const goToPageProduct = (id: number) => () => {
         router.push(`/product/${id}`);
     };
 
+    const goToCatalog = () => {
+        router.push('/catalogo');
+    };
+
     return (
-        <section id="productos" className="py-24 bg-gray-50">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="text-center mb-16 section-reveal">
+        <section ref={sectionRef} id="productos" className="py-24 bg-gray-50 relative overflow-hidden">
+            {/* Background decoration */}
+            <div className="absolute inset-0">
+                <div className={`absolute top-20 left-20 w-32 h-32 bg-green-50 rounded-full opacity-40 transition-all duration-1000 ${isVisible ? 'animate-pulse scale-100' : 'scale-0'
+                    }`}></div>
+                <div className={`absolute bottom-20 right-20 w-24 h-24 bg-green-100 rounded-full opacity-30 transition-all duration-1000 ${isVisible ? 'animate-bounce scale-100' : 'scale-0'
+                    }`} style={{ animationDelay: '300ms' }}></div>
+            </div>
+
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                {/* Header */}
+                <div className={`text-center mb-16 transition-all duration-700 transform ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
+                    }`}>
                     <h2 className="text-4xl lg:text-5xl font-light text-gray-900 mb-6">
-                        Catálogo completo
+                        Catálogo por categorías
                     </h2>
                     <p className="text-xl text-gray-600">
                         Explora nuestra colección organizada por ambientes
                     </p>
+                    <div className={`w-20 h-1 bg-green-400 mx-auto mt-8 rounded transition-all duration-700 transform ${isVisible ? 'scale-x-100 opacity-100' : 'scale-x-0 opacity-0'
+                        }`} style={{ transitionDelay: '400ms' }}></div>
                 </div>
 
-                {/* Innovative Category Filters */}
-                <div className="grid grid-cols-2 lg:grid-cols-6 gap-4 mb-16 section-reveal">
+                {/* Category Filters */}
+                <div className={`grid grid-cols-2 lg:grid-cols-5 gap-4 mb-16 transition-all duration-700 transform ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
+                    }`} style={{ transitionDelay: '200ms' }}>
                     <button
                         onClick={() => setSelectedCategory('all')}
-                        className={`group relative p-6 border border-gray-200 rounded transition-all duration-300 hover:border-green-500 hover:shadow-lg ${selectedCategory === 'all'
-                                ? 'bg-green-600 text-white border-green-600 shadow-lg'
-                                : 'bg-white text-gray-700 hover:bg-green-50'
+                        className={`group relative p-6 rounded-xl transition-all duration-300 hover:scale-105 ${selectedCategory === 'all'
+                                ? 'bg-green-600 text-white shadow-lg scale-105'
+                                : 'bg-white text-gray-700 hover:bg-green-50 shadow-sm hover:shadow-md'
                             }`}
                     >
                         <div className="text-center space-y-3">
-                            <div className="text-3xl">🏠</div>
+                            <div className="mx-auto w-12 h-12 flex items-center justify-center">
+                                <Home className="w-8 h-8" />
+                            </div>
                             <p className="font-medium">Todos</p>
                             <p className="text-xs opacity-75">Ver todo</p>
                         </div>
                     </button>
 
-                    {categories.map((category) => (
+                    {categories.map((category, index) => (
                         <button
                             key={category.id}
                             onClick={() => setSelectedCategory(category.id)}
-                            className={`group relative p-6 border border-gray-200 rounded transition-all duration-300 hover:border-green-500 hover:shadow-lg ${selectedCategory === category.id
-                                    ? 'bg-green-600 text-white border-green-600 shadow-lg'
-                                    : 'bg-white text-gray-700 hover:bg-green-50'
+                            className={`group relative p-6 rounded-xl transition-all duration-300 hover:scale-105 ${selectedCategory === category.id
+                                    ? 'bg-green-600 text-white shadow-lg scale-105'
+                                    : 'bg-white text-gray-700 hover:bg-green-50 shadow-sm hover:shadow-md'
                                 }`}
+                            style={{
+                                transitionDelay: `${(index + 1) * 50}ms`
+                            }}
                         >
                             <div className="text-center space-y-3">
-                                <div className="text-3xl">{category.icon}</div>
+                                <div className="mx-auto w-12 h-12 flex items-center justify-center">
+                                    {category.icon}
+                                </div>
                                 <p className="font-medium">{category.name}</p>
                                 <p className="text-xs opacity-75">{category.description}</p>
                             </div>
@@ -63,54 +127,33 @@ const CategoriesSection: React.FC = () => {
                 </div>
 
                 {/* Products Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {filteredProducts.map((product) => (
-                        <div key={product.id} className="group cursor-pointer bg-white border border-gray-200 hover:border-gray-300 transition-all duration-300" onClick={goToPageProduct(product.id)}>
-                            <div className="relative overflow-hidden">
-                                <img
-                                    src={product.image}
-                                    alt={product.name}
-                                    className="aspect-square w-full object-cover group-hover:scale-105 transition-transform duration-500"
-                                />
-                                {product.discount > 0 && (
-                                    <div className="absolute top-4 right-4 bg-gray-900 text-white px-3 py-1 text-sm font-medium">
-                                        -{product.discount}%
-                                    </div>
-                                )}
-                                {product.isNew && (
-                                    <div className="absolute top-4 left-4 bg-white text-gray-900 px-3 py-1 text-sm font-medium">
-                                        Nuevo
-                                    </div>
-                                )}
-                            </div>
-
-                            <div className="p-6 space-y-4">
-                                <div>
-                                    <h3 className="font-medium text-gray-900 mb-2">{product.name}</h3>
-                                    <p className="text-gray-600 text-sm line-clamp-2">{product.description}</p>
-                                </div>
-
-                                <div className="flex items-center justify-between">
-                                    <div className="flex items-center space-x-2">
-                                        {product.originalPrice ? (
-                                            <>
-                                                <span className="text-lg font-bold text-gray-900">${product.price}</span>
-                                                <span className="text-sm text-gray-400 line-through">${product.originalPrice}</span>
-                                            </>
-                                        ) : (
-                                            <span className="text-lg font-bold text-gray-900">${product.price}</span>
-                                        )}
-                                    </div>
-
-                                    <button className="text-gray-400 hover:text-gray-900 transition-colors">
-                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                                        </svg>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+                    {filteredProducts.map((product, index) => (
+                        <ProductCard
+                            key={product.id}
+                            product={product}
+                            index={index}
+                            startAnimation={isVisible}
+                            onClick={goToPageProduct(product.id)}
+                        />
                     ))}
+                </div>
+
+                {/* Call to Action Button */}
+                <div className={`text-center transition-all duration-700 transform ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
+                    }`} style={{ transitionDelay: '800ms' }}>
+                    <CustomButton   
+                        onClick={goToCatalog}
+                        variant="primary"
+                        size="lg"
+                        className="mx-auto"
+                    >
+                        Ver catálogo completo
+                    </CustomButton>
+
+                    <p className="text-gray-500 text-sm mt-4">
+                        Descubre más de 100 productos únicos
+                    </p>
                 </div>
             </div>
         </section>

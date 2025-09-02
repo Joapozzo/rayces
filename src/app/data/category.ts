@@ -2,33 +2,33 @@ import { Category } from "../interfaces/category";
 
 export const categories: Category[] = [
     {
-        id: "living",
-        name: "Living",
+        id: "mesas",
+        name: "Mesas",
+        icon: "🪑",
+        description: "Mesas de comedor contemporáneas y clásicas"
+    },
+    {
+        id: "sillones",
+        name: "Sillones",
         icon: "🛋️",
-        description: "Sofás, sillones y mesas de centro"
+        description: "Sillones, esquineros y sofás de living"
     },
     {
-        id: "comedor",
-        name: "Comedor",
+        id: "ratonas",
+        name: "Mesas Ratonas",
+        icon: "☕",
+        description: "Mesas de centro y auxiliares para living"
+    },
+    {
+        id: "sillas",
+        name: "Sillas",
+        icon: "🪑",
+        description: "Sillas de comedor con diversos modelos y tapizados"
+    },
+    {
+        id: "conjuntos",
+        name: "Conjuntos",
         icon: "🍽️",
-        description: "Mesas, sillas y aparadores"
-    },
-    {
-        id: "dormitorio",
-        name: "Dormitorio",
-        icon: "🛏️",
-        description: "Camas, veladores y armarios"
-    },
-    {
-        id: "oficina",
-        name: "Oficina",
-        icon: "💼",
-        description: "Escritorios, sillas y bibliotecas"
-    },
-    {
-        id: "exterior",
-        name: "Exterior",
-        icon: "🌿",
-        description: "Muebles de jardín y terraza"
+        description: "Sets completos de mesa + sillas para comedor"
     }
 ];

@@ -1,73 +1,133 @@
-// Hero Section Component
-const HeroSection = () => {
-    return (
-        <section id="inicio" className="min-h-screen flex items-center bg-gradient-to-br from-gray-50 to-white relative pt-10">
-            {/* Dynamic background elements */}
-            <div className="absolute inset-0 overflow-hidden">
-                <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-green-100 rounded-full opacity-20 blur-3xl animate-pulse"></div>
-                <div className="absolute bottom-1/3 left-1/4 w-64 h-64 bg-gray-200 rounded-full opacity-30 blur-2xl animate-bounce"></div>
-                <div className="absolute top-1/2 left-1/2 w-32 h-32 bg-green-200 rounded-full opacity-15 blur-xl animate-ping"></div>
-                <div className="absolute bottom-1/4 right-1/3 w-48 h-48 bg-green-50 rounded-full opacity-25 blur-2xl animate-pulse"></div>
+import React, { useState, useEffect } from "react";
+import { ArrowRight } from "lucide-react";
+import CustomButton from "./UI/button";
+import { useRouter } from "next/navigation";
 
-                {/* Floating dots */}
-                <div className="absolute top-20 left-20 w-2 h-2 bg-green-400 rounded-full animate-bounce"></div>
-                <div className="absolute top-40 right-40 w-1 h-1 bg-green-500 rounded-full animate-ping"></div>
-                <div className="absolute bottom-40 left-40 w-3 h-3 bg-green-300 rounded-full animate-pulse"></div>
+const HeroSection = () => {
+    const router = useRouter();
+    const [isLoaded, setIsLoaded] = useState(false);
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setIsLoaded(true);
+        }, 100);
+
+        return () => clearTimeout(timer);
+    }, []);
+
+    return (
+        <section className="relative min-h-screen flex items-center overflow-hidden">
+            {/* Video Background */}
+            <div className="absolute inset-0 z-0">
+                <video
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    className="w-full h-full object-cover"
+                >
+                    <source src="/videos/1.mp4" type="video/mp4" />
+                </video>
+                {/* Dark overlay */}
+                <div className="absolute inset-0 bg-black/30"></div>
             </div>
 
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 relative z-10">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-                    <div className="space-y-8 section-reveal">
-                        <div className="space-y-4">
-                            <p className="text-sm font-medium text-green-600 tracking-wider uppercase">Mueblería Premium</p>
-                            <h1 className="text-6xl lg:text-7xl font-light text-gray-900 leading-tight">
-                                Diseñamos
-                                <span className="block font-bold">desde la raíz</span>
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
+                <div className="grid grid-cols-1 lg:grid-cols-1 gap-16 items-center min-h-screen py-30">
+                    {/* Content */}
+                    <div className="space-y-8 max-w-4xl">
+                        <div className="space-y-6">
+                            {/* Badge */}
+                            <div className={`inline-flex items-center space-x-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full border border-white/20 transition-all duration-700 transform ${isLoaded
+                                    ? 'translate-y-0 opacity-100'
+                                    : 'translate-y-8 opacity-0'
+                                }`}>
+                                <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+                                <span className="text-sm font-medium text-white tracking-wider uppercase">
+                                    Líderes en fabricación de muebles
+                                </span>
+                            </div>
+
+                            {/* Main Title */}
+                            <h1 className="text-5xl lg:text-7xl font-medium text-white leading-tight">
+                                <span className={`block transition-all duration-700 transform ${isLoaded
+                                        ? 'translate-y-0 opacity-100'
+                                        : 'translate-y-12 opacity-0'
+                                    }`}
+                                    style={{ transitionDelay: '200ms' }}>
+                                    TU FUTURO
+                                </span>
+                                <span className={`block text-green-400 font-black transition-all duration-700 transform ${isLoaded
+                                        ? 'translate-y-0 opacity-100'
+                                        : 'translate-y-12 opacity-0'
+                                    }`}
+                                    style={{ transitionDelay: '400ms' }}>
+                                    NUESTRA MISIÓN
+                                </span>
                             </h1>
-                        </div>
-                        <p className="text-xl text-gray-600 leading-relaxed max-w-lg">
-                            Creamos muebles únicos trabajando directamente la materia prima.
-                            Cada pieza cuenta una historia de calidad excepcional.
-                        </p>
-                        <div className="flex flex-col sm:flex-row gap-4">
-                            <button className="group bg-gray-900 text-white px-8 py-4 rounded hover:bg-gray-800 transition-all duration-300 flex items-center space-x-2">
-                                <span className="font-medium">Explorar catálogo</span>
-                                <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                                </svg>
-                            </button>
-                            <button className="border border-gray-300 text-gray-700 px-8 py-4 rounded hover:border-green-500 hover:text-green-600 transition-all duration-300 font-medium">
-                                Consulta personalizada
-                            </button>
-                        </div>
-                    </div>
 
-                    <div className="relative section-reveal">
-                        <div className="aspect-[4/3] rounded overflow-hidden">
-                            <img
-                                src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=600&h=450&fit=crop"
-                                alt="Mueble Premium Rayces"
-                                className="w-full h-full object-cover"
-                            />
+                            {/* Description */}
+                            <p className={`text-lg text-gray-100 leading-relaxed max-w-2xl transition-all duration-700 transform ${isLoaded
+                                    ? 'translate-y-0 opacity-100'
+                                    : 'translate-y-8 opacity-0'
+                                }`}
+                                style={{ transitionDelay: '600ms' }}>
+                                Somos una empresa líder en fabricación de muebles de todo
+                                tipo, desde muebles de oficina hasta muebles de hogar. Nuestro
+                                objetivo es ofrecer productos de alta calidad y durabilidad a
+                                nuestros clientes.
+                            </p>
                         </div>
 
-                        {/* Floating card */}
-                        <div className="absolute -bottom-8 -left-8 bg-white p-6 rounded shadow-xl border border-gray-100">
-                            <div className="flex items-center space-x-4">
-                                <div className="w-12 h-12 bg-green-600 rounded-full flex items-center justify-center">
-                                    <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                    </svg>
-                                </div>
-                                <div>
-                                    <p className="text-2xl font-bold text-gray-900">500+</p>
-                                    <p className="text-sm text-gray-600">Proyectos únicos</p>
-                                </div>
+                        {/* Button */}
+                        <div className={`flex flex-col sm:flex-row gap-4 transition-all duration-700 transform ${isLoaded
+                                ? 'translate-y-0 opacity-100'
+                                : 'translate-y-8 opacity-0'
+                            }`}
+                            style={{ transitionDelay: '800ms' }}>
+                            <CustomButton
+                                className="text-lg max-w-xs px-8 flex items-center space-x-2"
+                                variant="secondary"
+                                size="md"
+                            >
+                                <span>Saber más</span>
+                                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
+                            </CustomButton>
+
+                            {/* Secondary Action */}
+                            <CustomButton
+                                className="text-lg max-w-xs px-8 flex items-center space-x-2"
+                                variant="outline"
+                                size="md"
+                                onClick={() => {router.push('/catalogo'); }}
+                            >
+                                <span>Ver catálogo</span>
+                            </CustomButton>
+                        </div>
+
+                        {/* Scroll indicator */}
+                        <div className={`absolute bottom-8 left-1/2 transform -translate-x-1/2 transition-all duration-700 ${isLoaded
+                                ? 'translate-y-0 opacity-100'
+                                : 'translate-y-4 opacity-0'
+                            }`}
+                            style={{ transitionDelay: '1200ms' }}>
+                            <div className="flex flex-col items-center space-y-2">
+                                <span className="text-white/60 text-xs uppercase tracking-wider">
+                                    Explorar
+                                </span>
+                                <div className="w-0.5 h-8 bg-white/40 animate-pulse"></div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
+            {/* Decorative elements */}
+            <div className={`absolute top-1/4 right-10 w-2 h-2 bg-green-400 rounded-full transition-all duration-1000 ${isLoaded ? 'animate-ping opacity-60' : 'opacity-0'
+                }`} style={{ transitionDelay: '1400ms' }}></div>
+
+            <div className={`absolute bottom-1/3 left-10 w-1 h-1 bg-green-300 rounded-full transition-all duration-1000 ${isLoaded ? 'animate-bounce opacity-40' : 'opacity-0'
+                }`} style={{ transitionDelay: '1600ms' }}></div>
         </section>
     );
 };
