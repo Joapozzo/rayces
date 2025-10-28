@@ -60,12 +60,10 @@ const Page = ({ params }: PageProps) => {
         );
     }
 
-    const imageGallery = [
-        product.image,
-        product.image,
-        product.image,
-        product.image
-    ];
+    const imageGallery: string[] = [
+        product.images.ambient,
+        product.images.white_bg
+    ].filter((img): img is string => Boolean(img));
 
     return (
         <div className="min-h-screen bg-white">
@@ -98,7 +96,7 @@ const Page = ({ params }: PageProps) => {
                         }`}>
                             <div className="aspect-square w-full relative">
                                 <Image
-                                    src={imageGallery[selectedImage]}
+                                    src={imageGallery[selectedImage] || product.images.ambient}
                                     alt={product.name}
                                     fill
                                     className="object-cover"
@@ -127,18 +125,18 @@ const Page = ({ params }: PageProps) => {
                             )} */}
 
                             {/* Action buttons */}
-                            <div className="absolute bottom-4 lg:bottom-6 right-4 lg:right-6 flex space-x-2">
+                            {/* <div className="absolute bottom-4 lg:bottom-6 right-4 lg:right-6 flex space-x-2">
                                 <button className="w-10 h-10 lg:w-12 lg:h-12 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center text-gray-700 hover:bg-white transition-all duration-300 shadow-lg">
                                     <Heart className="w-4 h-4 lg:w-5 lg:h-5" />
                                 </button>
                                 <button className="w-10 h-10 lg:w-12 lg:h-12 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center text-gray-700 hover:bg-white transition-all duration-300 shadow-lg">
                                     <Share2 className="w-4 h-4 lg:w-5 lg:h-5" />
                                 </button>
-                            </div>
+                            </div> */}
                         </div>
 
                         {/* Thumbnail Gallery */}
-                        <div className={`grid grid-cols-4 gap-3 lg:gap-4 transition-all duration-700 transform ${
+                        <div className={`grid grid-cols-2 gap-3 lg:gap-4 transition-all duration-700 transform ${
                             isImageVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
                         }`} style={{ transitionDelay: '200ms' }}>
                             {imageGallery.map((image, index) => (
@@ -153,7 +151,7 @@ const Page = ({ params }: PageProps) => {
                                 >
                                     <Image
                                         src={image}
-                                        alt={`${product.name} ${index + 1}`}
+                                        alt={`${product.name} - ${index === 0 ? 'Ambiente' : 'Fondo blanco'}`}
                                         fill
                                         className="object-cover"
                                     />
@@ -170,9 +168,14 @@ const Page = ({ params }: PageProps) => {
                             isContentVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
                         }`}>
                             <div className="flex items-center justify-between">
-                                <span className="text-sm font-medium text-green-600 bg-green-50 px-3 py-1 rounded-full capitalize">
-                                    {product.category}
-                                </span>
+                                <div className="flex items-center space-x-2">
+                                    <span className="text-sm font-medium text-green-600 bg-green-50 px-3 py-1 rounded-full capitalize">
+                                        {product.category}
+                                    </span>
+                                    <span className="text-sm font-medium text-gray-600 bg-gray-50 px-3 py-1 rounded-full capitalize">
+                                        {product.subcategory}
+                                    </span>
+                                </div>
                             </div>
 
                             <h1 className="text-3xl lg:text-4xl xl:text-5xl font-light text-gray-900 leading-tight">
@@ -217,6 +220,18 @@ const Page = ({ params }: PageProps) => {
                                     <span className="text-gray-600">Categoría</span>
                                     <span className="font-medium text-gray-900 capitalize">{product.category}</span>
                                 </div>
+
+                                <div className="flex justify-between items-center py-3 border-b border-gray-100">
+                                    <span className="text-gray-600">Subcategoría</span>
+                                    <span className="font-medium text-gray-900 capitalize">{product.subcategory}</span>
+                                </div>
+
+                                {product.materials && product.materials.length > 0 && (
+                                    <div className="flex justify-between items-center py-3 border-b border-gray-100">
+                                        <span className="text-gray-600">Materiales</span>
+                                        <span className="font-medium text-gray-900">{product.materials.join(', ')}</span>
+                                    </div>
+                                )}
 
                                 <div className="flex justify-between items-center py-3 border-b border-gray-100">
                                     <span className="text-gray-600">Código de producto</span>
@@ -322,7 +337,7 @@ const Page = ({ params }: PageProps) => {
 
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
                         {products
-                            .filter(p => p.category === product.category && p.id !== product.id)
+                            .filter(p => p.subcategory === product.subcategory && p.id !== product.id)
                             .slice(0, 3)
                             .map((relatedProduct, index) => (
                                 <Link
@@ -336,7 +351,7 @@ const Page = ({ params }: PageProps) => {
                                     <div className="relative overflow-hidden rounded-xl mb-4 lg:mb-6 shadow-sm group-hover:shadow-lg transition-all duration-500">
                                         <div className="aspect-[4/3] w-full relative">
                                             <Image
-                                                src={relatedProduct.image}
+                                                src={relatedProduct.images.ambient}
                                                 alt={relatedProduct.name}
                                                 fill
                                                 className="object-cover group-hover:scale-105 transition-transform duration-500"

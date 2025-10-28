@@ -1,17 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { Home, Sofa, Table, Coffee, ChefHat } from 'lucide-react';
+import { Home } from 'lucide-react';
 import { products } from "../data/product";
 import ProductCard from "./CardProduct";
 import CustomButton from "./UI/button";
-
-export const categories = [
-    { id: "conjuntos", name: "Mesas", description: "Mesas de comedor", icon: <Table className="w-8 h-8" /> },
-    { id: "sillones", name: "Sillones", description: "Sofás y esquineros", icon: <Sofa className="w-8 h-8" /> },
-    { id: "ratonas", name: "Ratonas", description: "Mesas de centro", icon: <Coffee className="w-8 h-8" /> },
-    { id: "sillas", name: "Sillas", description: "Sillas de comedor", icon: <ChefHat className="w-8 h-8" /> },
-    // { id: "conjuntos", name: "Conjuntos", description: "Sets completos", icon: <Archive className="w-8 h-8" /> }
-];
+import { categories } from "../data/categories";
 
 // Hook para detectar cuando un elemento entra en el viewport
 const useIntersectionObserver = (threshold: number = 0.2) => {
@@ -50,11 +43,7 @@ const CategoriesSection: React.FC = () => {
 
     const filteredProducts = selectedCategory === 'all'
         ? products.slice(0, 6) // Limitar a 6 productos para esta sección
-        : products.filter(p => p.category === selectedCategory).slice(0, 6);
-
-    const goToPageProduct = (id: number) => () => {
-        router.push(`/product/${id}`);
-    };
+        : products.filter(p => p.subcategory === selectedCategory).slice(0, 6);
 
     const goToCatalog = () => {
         router.push('/catalogo');
@@ -103,7 +92,7 @@ const CategoriesSection: React.FC = () => {
                         </div>
                     </button>
 
-                    {categories.map((category, index) => (
+                    {categories.filter(c => c.id !== 'all').map((category, index) => (
                         <button
                             key={category.id}
                             onClick={() => setSelectedCategory(category.id)}
@@ -116,7 +105,7 @@ const CategoriesSection: React.FC = () => {
                             }}
                         >
                             <div className="text-center space-y-3">
-                                <div className="mx-auto w-12 h-12 flex items-center justify-center">
+                                <div className="mx-auto w-12 h-12 flex items-center justify-center [&>svg]:w-8 [&>svg]:h-8">
                                     {category.icon}
                                 </div>
                                 <p className="font-medium">{category.name}</p>
@@ -134,7 +123,6 @@ const CategoriesSection: React.FC = () => {
                             product={product}
                             index={index}
                             startAnimation={isVisible}
-                            onClick={goToPageProduct(product.id)}
                         />
                     ))}
                 </div>

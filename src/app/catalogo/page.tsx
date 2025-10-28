@@ -1,18 +1,10 @@
 "use client";
 import React, { useState, useEffect, useRef } from 'react';
-import { Search, Filter, SlidersHorizontal, Home, Sofa, Table, ChefHat, Coffee } from 'lucide-react';
+import { Search, Filter, SlidersHorizontal } from 'lucide-react';
 import { products } from '../data/product';
 import ProductCard from '../components/CardProduct';
 import CustomInput from '../components/UI/Input';
-
-const categories = [
-    { id: "all", name: "Todos", icon: <Home className="w-5 h-5" /> },
-    { id: "conjuntos", name: "Mesas", description: "Mesas de comedor", icon: <Table className="w-5 h-5" /> },
-    { id: "sillones", name: "Sillones", description: "Sofás y esquineros", icon: <Sofa className="w-5 h-5" /> },
-    { id: "ratonas", name: "Ratonas", description: "Mesas de centro", icon: <Coffee className="w-5 h-5" /> },
-    { id: "sillas", name: "Sillas", description: "Sillas de comedor", icon: <ChefHat className="w-5 h-5" /> },
-    // { id: "almacenaje", name: "Almacenaje", icon: <Archive className="w-5 h-5" /> }
-];
+import { categories } from '../data/categories';
 
 const useIntersectionObserver = (threshold: number = 0.2) => {
     const [isVisible, setIsVisible] = useState(false);
@@ -56,13 +48,9 @@ const CatalogPage = () => {
     // Filtrar productos
     const filteredProducts = products.filter(product => {
         const matchesSearch = product.name.toLowerCase().includes(filters.search.toLowerCase());
-        const matchesCategory = filters.category === 'all' || product.category === filters.category;
+        const matchesCategory = filters.category === 'all' || product.subcategory === filters.category;
         return matchesSearch && matchesCategory;
     });
-
-    const handleProductClick = (id: number) => {
-        console.log(`Navigating to product ${id}`);
-    };
 
     return (
         <div className="min-h-screen bg-gray-50">
@@ -210,7 +198,6 @@ const CatalogPage = () => {
                             product={product}
                             index={index}
                             startAnimation={isProductsVisible}
-                            onClick={() => handleProductClick(product.id)}
                         />
                     ))}
                 </div>

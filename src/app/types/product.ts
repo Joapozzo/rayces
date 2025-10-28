@@ -1,16 +1,20 @@
 export interface Product {
     id: number;
     name: string;
-    price: number;
-    originalPrice?: number;
-    discount: number;
     description: string;
-    category: 'living' | 'comedor' | 'dormitorio' | 'oficina' | 'exterior';
-    image: string;
-    images?: string[]; // Array de imágenes adicionales
+    category: 'madera' | 'cromo';
+    subcategory: string;
+    images: {
+        ambient: string;
+        white_bg?: string;
+    };
     features: string[];
+    materials: string[];
     isNew?: boolean;
     isBestseller?: boolean;
+    price?: number;
+    originalPrice?: number;
+    discount?: number;
     stock?: number;
     dimensions?: {
         width: number;
@@ -18,22 +22,25 @@ export interface Product {
         depth: number;
         unit: 'cm' | 'm';
     };
-    materials?: string[];
     colors?: string[];
-    warranty?: number; // Meses de garantía
+    warranty?: number;
     assemblyRequired?: boolean;
-    weight?: number; // En kg
+    weight?: number;
     sku?: string;
-    rating?: number; // De 1 a 5
+    rating?: number;
     reviewCount?: number;
 }
 
-// Tipo para categorías
+// Tipo para categorías principales
 export type ProductCategory = Product['category'];
+
+// Tipo para subcategorías
+export type ProductSubcategory = Product['subcategory'];
 
 // Tipo para filtros
 export interface ProductFilters {
     category?: ProductCategory | 'todos';
+    subcategory?: ProductSubcategory | 'todos';
     priceMin?: number;
     priceMax?: number;
     isNew?: boolean;
@@ -42,4 +49,4 @@ export interface ProductFilters {
 }
 
 // Tipo para ordenamiento
-export type ProductSortOption = 'nombre' | 'precio-asc' | 'precio-desc' | 'rating' | 'newest'
+export type ProductSortOption = 'nombre' | 'precio-asc' | 'precio-desc' | 'rating' | 'newest';

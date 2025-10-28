@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useRouter } from "next/navigation";
 import { products } from "../data/product";
 import ProductCard from './CardProduct';
 
@@ -33,13 +32,8 @@ const useIntersectionObserver = (threshold: number = 0.2) => {
 };
 
 const FeaturedProductsSection: React.FC = () => {
-    const router = useRouter();
     const [sectionRef, isVisible] = useIntersectionObserver(0.2);
     const featuredProducts = products.slice(0, 3);
-
-    const goToPageProduct = (id: number) => () => {
-        router.push(`/product/${id}`);
-    };
 
     return (
         <section ref={sectionRef} className="py-24 bg-white relative overflow-hidden">
@@ -81,7 +75,6 @@ const FeaturedProductsSection: React.FC = () => {
                             index={index}
                             startAnimation={isVisible}
                             isFeatured={true}
-                            onClick={goToPageProduct(product.id)}
                         />
                     ))}
                 </div>

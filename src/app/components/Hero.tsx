@@ -39,8 +39,8 @@ const HeroSection = () => {
                         <div className="space-y-6">
                             {/* Badge */}
                             <div className={`inline-flex items-center space-x-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full border border-white/20 transition-all duration-700 transform ${isLoaded
-                                    ? 'translate-y-0 opacity-100'
-                                    : 'translate-y-8 opacity-0'
+                                ? 'translate-y-0 opacity-100'
+                                : 'translate-y-8 opacity-0'
                                 }`}>
                                 <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
                                 <span className="text-sm font-medium text-white tracking-wider uppercase">
@@ -51,15 +51,15 @@ const HeroSection = () => {
                             {/* Main Title */}
                             <h1 className="text-5xl lg:text-7xl font-medium text-white leading-tight">
                                 <span className={`block transition-all duration-700 transform ${isLoaded
-                                        ? 'translate-y-0 opacity-100'
-                                        : 'translate-y-12 opacity-0'
+                                    ? 'translate-y-0 opacity-100'
+                                    : 'translate-y-12 opacity-0'
                                     }`}
                                     style={{ transitionDelay: '200ms' }}>
                                     TU FUTURO
                                 </span>
                                 <span className={`block text-green-400 font-black transition-all duration-700 transform ${isLoaded
-                                        ? 'translate-y-0 opacity-100'
-                                        : 'translate-y-12 opacity-0'
+                                    ? 'translate-y-0 opacity-100'
+                                    : 'translate-y-12 opacity-0'
                                     }`}
                                     style={{ transitionDelay: '400ms' }}>
                                     NUESTRA MISIÓN
@@ -68,8 +68,8 @@ const HeroSection = () => {
 
                             {/* Description */}
                             <p className={`text-lg text-gray-100 leading-relaxed max-w-2xl transition-all duration-700 transform ${isLoaded
-                                    ? 'translate-y-0 opacity-100'
-                                    : 'translate-y-8 opacity-0'
+                                ? 'translate-y-0 opacity-100'
+                                : 'translate-y-8 opacity-0'
                                 }`}
                                 style={{ transitionDelay: '600ms' }}>
                                 Somos una empresa líder en fabricación de muebles de todo
@@ -81,11 +81,12 @@ const HeroSection = () => {
 
                         {/* Button */}
                         <div className={`flex flex-col sm:flex-row gap-4 transition-all duration-700 transform ${isLoaded
-                                ? 'translate-y-0 opacity-100'
-                                : 'translate-y-8 opacity-0'
+                            ? 'translate-y-0 opacity-100'
+                            : 'translate-y-8 opacity-0'
                             }`}
                             style={{ transitionDelay: '800ms' }}>
                             <CustomButton
+                                onClick={() => router.push('#contacto')}
                                 className="text-lg max-w-xs px-8 flex items-center space-x-2"
                                 variant="secondary"
                                 size="md"
@@ -99,7 +100,7 @@ const HeroSection = () => {
                                 className="text-lg max-w-xs px-8 flex items-center space-x-2"
                                 variant="outline"
                                 size="md"
-                                onClick={() => {router.push('/catalogo'); }}
+                                onClick={() => { router.push('/catalogo'); }}
                             >
                                 <span>Ver catálogo</span>
                             </CustomButton>
@@ -107,8 +108,8 @@ const HeroSection = () => {
 
                         {/* Scroll indicator */}
                         <div className={`absolute bottom-8 left-1/2 transform -translate-x-1/2 transition-all duration-700 ${isLoaded
-                                ? 'translate-y-0 opacity-100'
-                                : 'translate-y-4 opacity-0'
+                            ? 'translate-y-0 opacity-100'
+                            : 'translate-y-4 opacity-0'
                             }`}
                             style={{ transitionDelay: '1200ms' }}>
                             <div className="flex flex-col items-center space-y-2">
