@@ -2,9 +2,11 @@ import React, { useState, useEffect } from "react";
 import { ArrowRight } from "lucide-react";
 import CustomButton from "./UI/button";
 import { useRouter } from "next/navigation";
+import { useWhatsApp } from "../hooks/useWhatsApp";
 
 const HeroSection = () => {
     const router = useRouter();
+    const { sendWhatsApp } = useWhatsApp();
     const [isLoaded, setIsLoaded] = useState(false);
 
     useEffect(() => {
@@ -86,7 +88,7 @@ const HeroSection = () => {
                             }`}
                             style={{ transitionDelay: '800ms' }}>
                             <CustomButton
-                                onClick={() => router.push('#contacto')}
+                                onClick={() => sendWhatsApp('¡Hola! Me gustaría consultar sobre sus muebles.')}
                                 className="text-lg max-w-xs px-8 flex items-center space-x-2"
                                 variant="secondary"
                                 size="md"

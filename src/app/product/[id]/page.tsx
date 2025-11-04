@@ -2,8 +2,10 @@
 import React, { use, useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { ArrowLeft, Package, Shield, CreditCard, Wrench, Share2, Heart } from 'lucide-react';
+import { ArrowLeft, Package, Shield, CreditCard, Wrench, Share2, Heart, MessageCircle } from 'lucide-react';
 import { products } from '@/app/data/product';
+import { useWhatsApp } from '@/app/hooks/useWhatsApp';
+import { BsWhatsapp } from 'react-icons/bs';
 
 type PageProps = {
     params: Promise<{ id: string }>;
@@ -12,7 +14,7 @@ type PageProps = {
 const useIntersectionObserver = (threshold: number = 0.2) => {
     const [isVisible, setIsVisible] = useState(false);
     const ref = useRef<HTMLDivElement>(null);
-    
+
     useEffect(() => {
         const observer = new IntersectionObserver(
             ([entry]) => {
@@ -22,23 +24,24 @@ const useIntersectionObserver = (threshold: number = 0.2) => {
             },
             { threshold }
         );
-        
+
         if (ref.current) {
             observer.observe(ref.current);
         }
-        
+
         return () => {
             if (ref.current) {
                 observer.unobserve(ref.current);
             }
         };
     }, [threshold]);
-    
+
     return [ref, isVisible] as const;
 };
 
 const Page = ({ params }: PageProps) => {
     const { id } = use(params);
+    const { sendWhatsApp } = useWhatsApp();
     const [imageRef, isImageVisible] = useIntersectionObserver(0.3);
     const [contentRef, isContentVisible] = useIntersectionObserver(0.2);
     const [relatedRef, isRelatedVisible] = useIntersectionObserver(0.2);
@@ -46,6 +49,20 @@ const Page = ({ params }: PageProps) => {
     const product = products.find(p => p.id === parseInt(id as string));
 
     const [selectedImage, setSelectedImage] = useState(0);
+
+    const handleWhatsAppConsulta = () => {
+        const mensaje = `¡Hola! Me interesa el siguiente producto:
+
+*${product?.name}*
+Código: MBL-${product?.id.toString().padStart(3, '0')}
+Categoría: ${product?.category} - ${product?.subcategory}
+
+Me gustaría consultar sobre disponibilidad, precio y envío.
+
+Link: ${window.location.href}`;
+
+        sendWhatsApp(mensaje);
+    };
 
     if (!product) {
         return (
@@ -91,9 +108,8 @@ const Page = ({ params }: PageProps) => {
                     {/* Image Gallery */}
                     <div ref={imageRef} className="space-y-4 lg:space-y-6">
                         {/* Main Image */}
-                        <div className={`relative overflow-hidden rounded-2xl bg-gray-50 transition-all duration-700 transform ${
-                            isImageVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
-                        }`}>
+                        <div className={`relative overflow-hidden rounded-2xl bg-gray-50 transition-all duration-700 transform ${isImageVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
+                            }`}>
                             <div className="aspect-square w-full relative">
                                 <Image
                                     src={imageGallery[selectedImage] || product.images.ambient}
@@ -136,18 +152,16 @@ const Page = ({ params }: PageProps) => {
                         </div>
 
                         {/* Thumbnail Gallery */}
-                        <div className={`grid grid-cols-2 gap-3 lg:gap-4 transition-all duration-700 transform ${
-                            isImageVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
-                        }`} style={{ transitionDelay: '200ms' }}>
+                        <div className={`grid grid-cols-2 gap-3 lg:gap-4 transition-all duration-700 transform ${isImageVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
+                            }`} style={{ transitionDelay: '200ms' }}>
                             {imageGallery.map((image, index) => (
                                 <button
                                     key={index}
                                     onClick={() => setSelectedImage(index)}
-                                    className={`relative overflow-hidden rounded-xl aspect-square transition-all duration-300 ${
-                                        selectedImage === index
+                                    className={`relative overflow-hidden rounded-xl aspect-square transition-all duration-300 ${selectedImage === index
                                             ? 'ring-2 ring-green-500 scale-105'
                                             : 'hover:opacity-75 hover:scale-105'
-                                    }`}
+                                        }`}
                                 >
                                     <Image
                                         src={image}
@@ -164,9 +178,8 @@ const Page = ({ params }: PageProps) => {
                     <div ref={contentRef} className="space-y-6 lg:space-y-8">
 
                         {/* Header */}
-                        <div className={`space-y-4 lg:space-y-6 transition-all duration-700 transform ${
-                            isContentVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
-                        }`}>
+                        <div className={`space-y-4 lg:space-y-6 transition-all duration-700 transform ${isContentVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
+                            }`}>
                             <div className="flex items-center justify-between">
                                 <div className="flex items-center space-x-2">
                                     <span className="text-sm font-medium text-green-600 bg-green-50 px-3 py-1 rounded-full capitalize">
@@ -185,12 +198,30 @@ const Page = ({ params }: PageProps) => {
                             <p className="text-lg lg:text-xl text-gray-600 leading-relaxed">
                                 {product.description}
                             </p>
+
+                            {/* WhatsApp CTA Button */}
+                            <div className="flex flex-col sm:flex-row gap-4 pt-4">
+                                <button
+                                    onClick={handleWhatsAppConsulta}
+                                    className="flex-1 bg-green-600 hover:bg-green-700 text-white font-semibold py-4 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02] flex items-center justify-center space-x-3 group"
+                                >
+                                    <BsWhatsapp className="w-5 h-5 group-hover:rotate-12 transition-transform duration-300" />
+                                    <span>Consultar por WhatsApp</span>
+                                </button>
+
+                                <button
+                                    onClick={handleWhatsAppConsulta}
+                                    className="sm:flex-none bg-green-50 hover:bg-green-100 text-green-700 font-semibold py-4 px-6 rounded-xl border-2 border-green-200 hover:border-green-300 transition-all duration-300 flex items-center justify-center space-x-2"
+                                >
+                                    <BsWhatsapp className="w-5 h-5" />
+                                    <span>Solicitar cotización</span>
+                                </button>
+                            </div>
                         </div>
 
                         {/* Features */}
-                        <div className={`space-y-4 lg:space-y-6 transition-all duration-700 transform ${
-                            isContentVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
-                        }`} style={{ transitionDelay: '200ms' }}>
+                        <div className={`space-y-4 lg:space-y-6 transition-all duration-700 transform ${isContentVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
+                            }`} style={{ transitionDelay: '200ms' }}>
                             <h3 className="text-xl lg:text-2xl font-medium text-gray-900">
                                 Características destacadas
                             </h3>
@@ -208,9 +239,8 @@ const Page = ({ params }: PageProps) => {
                         </div>
 
                         {/* Product Details */}
-                        <div className={`space-y-6 pt-6 lg:pt-8 border-t border-gray-200 transition-all duration-700 transform ${
-                            isContentVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
-                        }`} style={{ transitionDelay: '400ms' }}>
+                        <div className={`space-y-6 pt-6 lg:pt-8 border-t border-gray-200 transition-all duration-700 transform ${isContentVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
+                            }`} style={{ transitionDelay: '400ms' }}>
                             <h3 className="text-xl lg:text-2xl font-medium text-gray-900">
                                 Información del producto
                             </h3>
@@ -251,9 +281,8 @@ const Page = ({ params }: PageProps) => {
                         </div>
 
                         {/* Services Information */}
-                        <div className={`space-y-6 pt-6 lg:pt-8 border-t border-gray-200 transition-all duration-700 transform ${
-                            isContentVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
-                        }`} style={{ transitionDelay: '600ms' }}>
+                        <div className={`space-y-6 pt-6 lg:pt-8 border-t border-gray-200 transition-all duration-700 transform ${isContentVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
+                            }`} style={{ transitionDelay: '600ms' }}>
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-6">
 
                                 {/* Delivery Info */}
@@ -304,9 +333,8 @@ const Page = ({ params }: PageProps) => {
                         </div>
 
                         {/* Back Button */}
-                        <div className={`pt-6 lg:pt-8 transition-all duration-700 transform ${
-                            isContentVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
-                        }`} style={{ transitionDelay: '800ms' }}>
+                        <div className={`pt-6 lg:pt-8 transition-all duration-700 transform ${isContentVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
+                            }`} style={{ transitionDelay: '800ms' }}>
                             <Link
                                 href="/catalog"
                                 className="inline-flex items-center space-x-2 text-green-600 hover:text-green-700 font-medium transition-colors group"
@@ -321,18 +349,16 @@ const Page = ({ params }: PageProps) => {
 
                 {/* Related Products Section */}
                 <div ref={relatedRef} className="mt-16 lg:mt-24 pt-16 lg:pt-24 border-t border-gray-200">
-                    <div className={`text-center mb-12 lg:mb-16 transition-all duration-700 transform ${
-                        isRelatedVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
-                    }`}>
+                    <div className={`text-center mb-12 lg:mb-16 transition-all duration-700 transform ${isRelatedVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
+                        }`}>
                         <h2 className="text-3xl lg:text-4xl xl:text-5xl font-light text-gray-900 mb-4 lg:mb-6">
                             Productos relacionados
                         </h2>
                         <p className="text-lg lg:text-xl text-gray-600">
                             Otros productos que te pueden interesar
                         </p>
-                        <div className={`w-20 h-1 bg-green-400 mx-auto mt-6 lg:mt-8 rounded transition-all duration-700 transform ${
-                            isRelatedVisible ? 'scale-x-100 opacity-100' : 'scale-x-0 opacity-0'
-                        }`} style={{ transitionDelay: '400ms' }}></div>
+                        <div className={`w-20 h-1 bg-green-400 mx-auto mt-6 lg:mt-8 rounded transition-all duration-700 transform ${isRelatedVisible ? 'scale-x-100 opacity-100' : 'scale-x-0 opacity-0'
+                            }`} style={{ transitionDelay: '400ms' }}></div>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
@@ -343,9 +369,8 @@ const Page = ({ params }: PageProps) => {
                                 <Link
                                     key={relatedProduct.id}
                                     href={`/product/${relatedProduct.id}`}
-                                    className={`group cursor-pointer block transition-all duration-700 transform ${
-                                        isRelatedVisible ? 'translate-y-0 opacity-100' : 'translate-y-12 opacity-0'
-                                    }`}
+                                    className={`group cursor-pointer block transition-all duration-700 transform ${isRelatedVisible ? 'translate-y-0 opacity-100' : 'translate-y-12 opacity-0'
+                                        }`}
                                     style={{ transitionDelay: `${600 + (index * 150)}ms` }}
                                 >
                                     <div className="relative overflow-hidden rounded-xl mb-4 lg:mb-6 shadow-sm group-hover:shadow-lg transition-all duration-500">

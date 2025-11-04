@@ -38,7 +38,7 @@ const Navigation = () => {
                 ? 'bg-white/95 backdrop-blur-md shadow-sm' 
                 : 'bg-transparent'
         }`}>
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="max-w-7xl mx-auto px-6 sm:px-6 lg:px-8">
                 <div className="flex justify-between items-center h-25">
                     {/* Logo */}
                     <div className="flex-shrink-0">
@@ -48,7 +48,7 @@ const Navigation = () => {
                                 alt="Rayces Logo"
                                 width={120}
                                 height={50}
-                                className="h-20 w-auto transition-all duration-300"
+                                className="h-15 md:h-20 w-auto transition-all duration-300"
                                 priority
                             />
                         </a>
@@ -99,23 +99,23 @@ const Navigation = () => {
                     </div>
 
                     {/* Mobile Menu Button */}
-                    <button 
+                    <button
                         onClick={toggleMobileMenu}
                         className={`md:hidden p-2 transition-colors duration-300 ${
                             shouldHaveBackground ? 'text-gray-700' : 'text-white'
                         }`}
                         aria-label="Toggle mobile menu"
                     >
-                        <div className="relative w-6 h-6">
+                        <div className="relative w-6 h-5 flex flex-col justify-center">
                             {/* Hamburger Icon */}
-                            <span className={`absolute top-0 left-0 w-6 h-0.5 bg-current transform transition-all duration-300 ${
-                                isMobileMenuOpen ? 'rotate-45 top-2.5' : 'rotate-0'
+                            <span className={`absolute left-0 w-6 h-0.5 bg-current transform transition-all duration-300 origin-center ${
+                                isMobileMenuOpen ? 'rotate-45 top-[9px]' : 'top-0'
                             }`}></span>
-                            <span className={`absolute top-2.5 left-0 w-6 h-0.5 bg-current transition-all duration-300 ${
-                                isMobileMenuOpen ? 'opacity-0' : 'opacity-100'
+                            <span className={`absolute left-0 top-[9px] w-6 h-0.5 bg-current transition-all duration-300 ${
+                                isMobileMenuOpen ? 'opacity-0 scale-0' : 'opacity-100 scale-100'
                             }`}></span>
-                            <span className={`absolute top-5 left-0 w-6 h-0.5 bg-current transform transition-all duration-300 ${
-                                isMobileMenuOpen ? '-rotate-45 top-2.5' : 'rotate-0'
+                            <span className={`absolute left-0 w-6 h-0.5 bg-current transform transition-all duration-300 origin-center ${
+                                isMobileMenuOpen ? '-rotate-45 top-[9px]' : 'top-[18px]'
                             }`}></span>
                         </div>
                     </button>
